@@ -25,11 +25,14 @@ class TextEditor(object):
         textbox = tk.Text(root)
         menubar = Menu(root)
         filemenu = Menu(menubar, tearoff=0)
+        helpmenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New", command=TextEditor.New)
         filemenu.add_command(label="Save", command=TextEditor.Save)
         filemenu.add_command(label="Save As", command=TextEditor.SaveAs)
         filemenu.add_command(label="Open", command=TextEditor.Open)
+        helpmenu.add_command(label="About", command=TextEditor.About)
         menubar.add_cascade(label="File", menu=filemenu)
+        menubar.add_cascade(label="Help", menu=helpmenu)
         root.config(menu=menubar)
         textbox.pack(expand=True, fill=BOTH)
         
@@ -47,6 +50,8 @@ class TextEditor(object):
             CurrentOpenFile = filename
             #global root
             root.title(os.path.basename(CurrentOpenFile) + " - VCM's Editor")
+    def About():
+        tkinter.messagebox(title="About VCM's Editor", message="Placeholder")
         
 
 
