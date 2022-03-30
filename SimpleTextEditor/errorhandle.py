@@ -8,4 +8,5 @@ class ErrorHandler:
         
         f.write(text + "\n")
         f.close()
-# Does this work?
+
+

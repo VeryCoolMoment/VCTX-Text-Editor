@@ -3,10 +3,11 @@ from tkinter import *
 from tkinter import filedialog as fd
 from errorhandle import ErrorHandler as error
 from tkinter.filedialog import asksaveasfile
+import os
 
 
 
-class TextEditor:
+class TextEditor(object):
     global textbox
     global isFileSaved
     global CurrentOpenFile
@@ -14,7 +15,8 @@ class TextEditor:
     global filename
     global root
     def Main():
-        CurrentOpenFile = "null"
+        global CurrentOpenFile
+        CurrentOpenFile = "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
         global root
         root = tk.Tk()
         root.title("Text Editor")
@@ -41,9 +43,10 @@ class TextEditor:
             textbox.delete("1.0", END)
             textbox.insert("1.0", f.read())
             TextEditor.isFileSaved = True 
-            TextEditor.CurrentOpenFile = filename
+            global CurrentOpenFile
+            CurrentOpenFile = filename
             #global root
-            root.title("Current Open File - VCM's Editor")
+            root.title(os.path.basename(CurrentOpenFile) + " - VCM's Editor")
         
 
 
@@ -51,15 +54,21 @@ class TextEditor:
         textbox.delete("1.0", END)
         global isFileSaved
         TextEditor.isFileSaved = False
-        TextEditor.CurrentOpenFile = "null"
+        TextEditor.CurrentOpenFile = "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        root.title("Untitled - VCM's Editor")
+
     def Save():
-        if TextEditor.CurrentOpenFile == "null":
+        
+        #global CurrentOpenFile
+        if os.path.exists(CurrentOpenFile) == False:
             TextEditor.SaveAs()
             TextEditor.isFileSaved = True
+
         else:
-            f = open(TextEditor.CurrentOpenFile, "w")
+            f = open(CurrentOpenFile, "w")
             f.write(textbox.get("1.0", "end"))
             f.close()
+
     def SaveAs():
         files = [('All Files', '*.*'), 
                 ('Python Files', '*.py'),
@@ -69,8 +78,9 @@ class TextEditor:
         if file:
             with open(file.name, "w") as f:
                 f.write(textboxcontent)
-                CurrentOpenFile = filename
-                root.title("Current Open File - VCM's Editor")
+                global CurrentOpenFile
+                CurrentOpenFile = file.name
+                root.title(os.path.basename(CurrentOpenFile) +" - VCM's Editor")
 
 
 
