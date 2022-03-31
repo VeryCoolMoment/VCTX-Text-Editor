@@ -4,7 +4,8 @@ from tkinter import filedialog as fd
 from errorhandle import ErrorHandler as error
 from tkinter.filedialog import asksaveasfile
 import os
-
+import tkinter
+import platform
 
 
 class TextEditor(object):
@@ -21,6 +22,8 @@ class TextEditor(object):
         root = tk.Tk()
         root.title("Text Editor")
         root.geometry("800x600")
+        global currentbuild
+        currentbuild = "Prototype-1"
         global textbox 
         textbox = tk.Text(root)
         menubar = Menu(root)
@@ -51,7 +54,7 @@ class TextEditor(object):
             #global root
             root.title(os.path.basename(CurrentOpenFile) + " - VCM's Editor")
     def About():
-        tkinter.messagebox(title="About VCM's Editor", message="Placeholder")
+        tkinter.messagebox.showinfo(title="About VCM's Editor", message=f"Current Build:{currentbuild}\nCurrent Operating System:{platform.platform()}")
         
 
 
