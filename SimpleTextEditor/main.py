@@ -2,10 +2,13 @@ import tkinter as tk
 from tkinter import *
 from tkinter import filedialog as fd
 from errorhandle import ErrorHandler as error
+from parser import Parser as lang_parser
 from tkinter.filedialog import asksaveasfile
 import os
 import tkinter
 import platform
+import tkinter.scrolledtext as scrolledtext
+
 
 
 class TextEditor(object):
@@ -20,12 +23,13 @@ class TextEditor(object):
         CurrentOpenFile = "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
         global root
         root = tk.Tk()
-        root.title("Text Editor")
+        root.title("Untitled - VCTX")
         root.geometry("800x600")
         global currentbuild
-        currentbuild = "Prototype-1"
+        currentbuild = lang_parser.LoadResource("VCTX_VERSION")
         global textbox 
-        textbox = tk.Text(root)
+        textbox =scrolledtext.ScrolledText(root, undo=True)
+
         menubar = Menu(root)
         filemenu = Menu(menubar, tearoff=0)
         helpmenu = Menu(menubar, tearoff=0)
@@ -34,48 +38,63 @@ class TextEditor(object):
         filemenu.add_command(label="Save As", command=TextEditor.SaveAs)
         filemenu.add_command(label="Open", command=TextEditor.Open)
         helpmenu.add_command(label="About", command=TextEditor.About)
+        root.bind('<Control-s>', TextEditor.CTRLS_SAVE)
+        root.protocol("WM_DELETE_WINDOW",  TextEditor.on_close)
         menubar.add_cascade(label="File", menu=filemenu)
         menubar.add_cascade(label="Help", menu=helpmenu)
         root.config(menu=menubar)
         textbox.pack(expand=True, fill=BOTH)
-        
         root.mainloop()
+
     def Open():
         filename = fd.askopenfilename()
-        print(filename)
         if filename != "":
-
-            f = open(filename)
-            textbox.delete("1.0", END)
-            textbox.insert("1.0", f.read())
-            TextEditor.isFileSaved = True 
-            global CurrentOpenFile
-            CurrentOpenFile = filename
-            #global root
-            root.title(os.path.basename(CurrentOpenFile) + " - VCM's Editor")
+            try:
+                f = open(filename)
+                textbox.delete("1.0", END)
+                textbox.insert("1.0", f.read())
+                TextEditor.isFileSaved = True 
+                global CurrentOpenFile
+                CurrentOpenFile = filename
+                root.title(os.path.basename(CurrentOpenFile) + " - VCTX")
+            except:
+                error.DisplayError("Cannot open file!", "The file you have tried to open isn't supported or is corrupted in some way", True)
+                TextEditor.New()
     def About():
-        tkinter.messagebox.showinfo(title="About VCM's Editor", message=f"Current Build:{currentbuild}\nCurrent Operating System:{platform.platform()}")
+        tkinter.messagebox.showinfo(title="About VCTX", message=f"Current Build:{currentbuild}\nCurrent Operating System:{platform.platform()}")
         
-
 
     def New():
         textbox.delete("1.0", END)
         global isFileSaved
         TextEditor.isFileSaved = False
         TextEditor.CurrentOpenFile = "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        root.title("Untitled - VCM's Editor")
+        root.title("Untitled - VCTX")
+
+    def CTRLS_SAVE(self):
+        TextEditor.Save() 
 
     def Save():
-        
-        #global CurrentOpenFile
         if os.path.exists(CurrentOpenFile) == False:
             TextEditor.SaveAs()
-            TextEditor.isFileSaved = True
-
+            
         else:
             f = open(CurrentOpenFile, "w")
             f.write(textbox.get("1.0", "end"))
             f.close()
+
+    def on_close(): 
+        if os.path.exists(CurrentOpenFile) == False or TextEditor.isFileSaved == False:
+            MsgBox = tk.messagebox.askyesnocancel ('Exiting VCTX','Would you like to save your untitled project?',icon = 'warning')
+            if MsgBox == True:
+                TextEditor.SaveAs()
+                root.destroy()
+            elif MsgBox == False:
+                root.destroy()
+            elif MsgBox == None:
+                return
+        else:
+            root.destroy()
 
     def SaveAs():
         files = [('All Files', '*.*'), 
@@ -88,7 +107,8 @@ class TextEditor(object):
                 f.write(textboxcontent)
                 global CurrentOpenFile
                 CurrentOpenFile = file.name
-                root.title(os.path.basename(CurrentOpenFile) +" - VCM's Editor")
+                root.title(os.path.basename(CurrentOpenFile) +" - VCTX")
+                TextEditor.isFileSaved = True
 
 
 

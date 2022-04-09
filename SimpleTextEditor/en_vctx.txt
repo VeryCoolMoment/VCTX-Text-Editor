@@ -1,0 +1,2 @@
+VCTX_VERSION = "Prototype-2"
+VCTX_NAME = "VCTX"
