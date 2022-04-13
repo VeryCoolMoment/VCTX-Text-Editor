@@ -20,7 +20,7 @@ class TextEditor(object):
     global root
     def Main():
         global CurrentOpenFile
-        CurrentOpenFile = "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        CurrentOpenFile = None
         global root
         root = tk.Tk()
         root.title("Untitled - VCTX")
@@ -68,7 +68,7 @@ class TextEditor(object):
         textbox.delete("1.0", END)
         global isFileSaved
         TextEditor.isFileSaved = False
-        TextEditor.CurrentOpenFile = "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        TextEditor.CurrentOpenFile = None
         root.title("Untitled - VCTX")
 
     def CTRLS_SAVE(self):
@@ -84,7 +84,7 @@ class TextEditor(object):
             f.close()
 
     def on_close(): 
-        if os.path.exists(CurrentOpenFile) == False or TextEditor.isFileSaved == False:
+        if CurrentOpenFile == None or TextEditor.isFileSaved == False:
             MsgBox = tk.messagebox.askyesnocancel ('Exiting VCTX','Would you like to save your untitled project?',icon = 'warning')
             if MsgBox == True:
                 TextEditor.SaveAs()
