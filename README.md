@@ -1,6 +1,6 @@
-# Simple Text Editor
-Something Simple (Code may be unreadable at sometimes, don't understand something just make a Issue)
+# VCTX
+A Text Editor developed in Python and Tkinter
 # Todos
-- Finish the editor
-- Finish the Readme
-(yeah this is simple leave me alone this is temp)
+- Make it look better
+- Fix some stupid design flaws
+- Make Language support!
