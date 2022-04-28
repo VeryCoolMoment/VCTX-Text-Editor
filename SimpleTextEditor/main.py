@@ -13,9 +13,7 @@ import tkinter.scrolledtext as scrolledtext
 
 class TextEditor(object):
     global textbox
-    global isFileSaved
     global CurrentOpenFile
-    isFileSaved = False
     global filename
     global root
     def Main():
@@ -53,7 +51,6 @@ class TextEditor(object):
                 f = open(filename)
                 textbox.delete("1.0", END)
                 textbox.insert("1.0", f.read())
-                TextEditor.isFileSaved = True 
                 global CurrentOpenFile
                 CurrentOpenFile = filename
                 root.title(os.path.basename(CurrentOpenFile) + " - VCTX")
@@ -66,8 +63,6 @@ class TextEditor(object):
 
     def New():
         textbox.delete("1.0", END)
-        global isFileSaved
-        TextEditor.isFileSaved = False
         TextEditor.CurrentOpenFile = None
         root.title("Untitled - VCTX")
 
@@ -75,7 +70,7 @@ class TextEditor(object):
         TextEditor.Save() 
 
     def Save():
-        if os.path.exists(CurrentOpenFile) == False:
+        if CurrentOpenFile == None:
             TextEditor.SaveAs()
             
         else:
@@ -84,7 +79,7 @@ class TextEditor(object):
             f.close()
 
     def on_close(): 
-        if CurrentOpenFile == None or TextEditor.isFileSaved == False:
+        if CurrentOpenFile == None:
             MsgBox = tk.messagebox.askyesnocancel ('Exiting VCTX','Would you like to save your untitled project?',icon = 'warning')
             if MsgBox == True:
                 TextEditor.SaveAs()
@@ -108,7 +103,6 @@ class TextEditor(object):
                 global CurrentOpenFile
                 CurrentOpenFile = file.name
                 root.title(os.path.basename(CurrentOpenFile) +" - VCTX")
-                TextEditor.isFileSaved = True
 
 
 
